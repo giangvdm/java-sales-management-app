@@ -1,0 +1,16 @@
+1,John Doe,1742 Locust Street Grand Rapids Michigan 49508 US,RETAIL
+2,Derin Aydin,Ankara Turkey,WHOLESALE
+3,Maggie Landers,Ernstbrunner Strasse 88 Reichenthal Lower Austria 4193 Austria,ONLINE
+4,Kang  Tan,088934 Singapore,WHOLESALE
+1,John Doe,1742 Locust Street Grand Rapids Michigan 49508 US,RETAIL
+2,Derin Aydin,Ankara Turkey,WHOLESALE
+3,Maggie Landers,Ernstbrunner Strasse 88 Reichenthal Lower Austria 4193 Austria,ONLINE
+4,Kang  Tan,088934 Singapore,WHOLESALE
+1,John Doe,1742 Locust Street Grand Rapids Michigan 49508 US,RETAIL
+2,Derin Aydin,Ankara Turkey,WHOLESALE
+3,Maggie Landers,Ernstbrunner Strasse 88 Reichenthal Lower Austria 4193 Austria,ONLINE
+4,Kang  Tan,088934 Singapore,WHOLESALE
+1,John Doe,1742 Locust Street Grand Rapids Michigan 49508 US,RETAIL
+2,Derin Aydin,Ankara Turkey,WHOLESALE
+3,Maggie Landers,Ernstbrunner Strasse 88 Reichenthal Lower Austria 4193 Austria,ONLINE
+4,Kang  Tan,088934 Singapore,WHOLESALE
