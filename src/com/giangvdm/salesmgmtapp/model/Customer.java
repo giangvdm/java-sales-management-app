@@ -22,9 +22,18 @@ public class Customer {
     private String address;
     
     /**
-     * @param enum customer group
+     * @param String customer group
      */
     private String group;
+    
+    /**
+     * @param enum customer group types
+     */
+    public static enum groupTypes {
+        WHOLESALE,
+        RETAIL,
+        ONLINE
+    }
 
     public int getId() {
         return id;

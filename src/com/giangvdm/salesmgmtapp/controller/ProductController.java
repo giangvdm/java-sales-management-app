@@ -1,6 +1,7 @@
 package com.giangvdm.salesmgmtapp.controller;
 
 import com.giangvdm.salesmgmtapp.model.Customer;
+import com.giangvdm.salesmgmtapp.model.Product;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -14,11 +15,8 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 
@@ -26,76 +24,60 @@ import javafx.scene.control.cell.PropertyValueFactory;
  *
  * @author giangvdm
  */
-public class CustomerController extends AbstractController implements Initializable {
+public class ProductController extends AbstractController implements Initializable {
     
-    private static int lastCustomerId;
-    
-    @FXML
-    private TableView<Customer> table;
+    private static int lastProductId;
     
     @FXML
-    private TableColumn<Customer, Integer> idColumn;
+    private TableView<Product> table;
     
     @FXML
-    private TableColumn<Customer, String> nameColumn;
+    private TableColumn<Product, Integer> idColumn;
     
     @FXML
-    private TableColumn<Customer, String> addressColumn;
+    private TableColumn<Product, String> nameColumn;
     
     @FXML
-    private TableColumn<Customer, String> groupColumn;
+    private TableColumn<Product, Float> priceColumn;
     
-    private ObservableList<Customer> customerList;
-    
-    @FXML
-    private TextField customerNameInput;
+    private ObservableList<Product> productList;
     
     @FXML
-    private TextArea customerAddressInput;
+    private TextField productNameInput;
     
     @FXML
-    private ComboBox customerGroupInput;
+    private TextField productPrice;
     
     /**
-     * @param String Path to Customer data file
+     * @param String Path to Product data file
      */
-    private static final String CUSTOMER_DATA_FILE_PATH = "src/com/giangvdm/salesmgmtapp/data/KH.txt";
+    private static final String PRODUCT_DATA_FILE_PATH = "src/com/giangvdm/salesmgmtapp/data/MATHANG.txt";
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         
-        /** Initiate last customer id */
-        CustomerController.lastCustomerId = 0;
-        
-        /** Initiate Customer Group ComboBox */
-        customerGroupInput.getItems().removeAll(customerGroupInput.getItems());
-        customerGroupInput.getItems().addAll(
-                Customer.groupTypes.WHOLESALE,
-                Customer.groupTypes.RETAIL,
-                Customer.groupTypes.ONLINE
-        );
-        customerGroupInput.getSelectionModel().select(Customer.groupTypes.WHOLESALE);
+        /** Initiate last product id */
+        ProductController.lastProductId = 0;
         
         /** Read customer data file and initiate data */
-        this.customerList = FXCollections.observableArrayList();
+        this.productList = FXCollections.observableArrayList();
         BufferedReader reader;
         try {
-            reader = new BufferedReader(new FileReader(CUSTOMER_DATA_FILE_PATH));
+            reader = new BufferedReader(new FileReader(PRODUCT_DATA_FILE_PATH));
             String line = reader.readLine();
             while (line != null) {
                 String[] lineData = line.split(",");
                 
                 try {
-                    Customer cust = new Customer(
+                    Product prod = new Product(
                         Integer.parseInt(lineData[0]),
                         lineData[1],
-                        lineData[2],
-                        lineData[3]
+                        Float.parseFloat(lineData[2])
                     );
-                    this.customerList.add(cust);
-                    // update last customer id
-                    if (cust.getId() > CustomerController.lastCustomerId) {
-                        CustomerController.lastCustomerId = cust.getId();
+                    this.productList.add(prod);
+                    // update last product id
+                    if (prod.getId() > ProductController.lastProductId) {
+                        ProductController.lastProductId = prod.getId();
                     }
                 }
                 catch (ArrayIndexOutOfBoundsException arrEx) {
@@ -111,51 +93,48 @@ public class CustomerController extends AbstractController implements Initializa
         
         }
         
-        /** Initiate Customer TableView */
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        addressColumn.setCellValueFactory(new PropertyValueFactory<>("address"));
-        groupColumn.setCellValueFactory(new PropertyValueFactory<>("group"));
-        table.setItems(customerList);
+        priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
+        table.setItems(productList);
     }
     
     @Override
     public void create() {
-        String name = this.customerNameInput.getText().trim();
-        String addr = this.customerAddressInput.getText().trim();
-        String group = this.customerGroupInput.getValue().toString().trim();
+        String name = this.productNameInput.getText().trim();
+        String price = this.productPrice.getText().trim();
         
-        if (name.isEmpty() || addr.isEmpty() || group.isEmpty()) {
-            Alert alert = new Alert(AlertType.ERROR);
+        if (name.isEmpty() || price.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
-            alert.setHeaderText("Cannot create new Customer.");
+            alert.setHeaderText("Cannot create new Product.");
             alert.setContentText("Please fill in all the required fields!");
             alert.showAndWait();
             
             return;
         }
         
-        int id = ++CustomerController.lastCustomerId;
+        int id = ++ProductController.lastProductId;
         
-        Customer cust = new Customer(id, name, addr, group);
+        Product prod = new Product(id, name, Float.parseFloat(price));
         
         /** Write to data file */
         BufferedWriter writer;
         try {
-            writer = new BufferedWriter(new FileWriter(CUSTOMER_DATA_FILE_PATH, true));
-            String line = String.join(",", Integer.toString(id), name, addr, group);
+            writer = new BufferedWriter(new FileWriter(PRODUCT_DATA_FILE_PATH, true));
+            String line = String.join(",", Integer.toString(id), name, price);
             writer.newLine();
             writer.write(line);
             writer.close();
             
             /** Add to list */
-            this.customerList.add(cust);
+            this.productList.add(prod);
         }
         catch (IOException e) {
-            Alert alert = new Alert(AlertType.ERROR);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
-            alert.setHeaderText("Cannot save new Customer.");
-            alert.setContentText("Something went wrong while saving new Customer. Please try again!");
+            alert.setHeaderText("Cannot save new Product.");
+            alert.setContentText("Something went wrong while saving new Product. Please try again!");
             alert.showAndWait();
             
             return;
@@ -163,16 +142,16 @@ public class CustomerController extends AbstractController implements Initializa
         
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Success");
-        alert.setHeaderText("Create new Customer successfully!");
+        alert.setHeaderText("Create new Product successfully!");
         alert.showAndWait();
     }
     
     @Override
     public void delete() {
-        Customer selectedCustomer = table.getSelectionModel().getSelectedItem();
+        Product selectedProduct = table.getSelectionModel().getSelectedItem();
         
         /** Delete Customer data from file */
-        File oldFile = new File(CUSTOMER_DATA_FILE_PATH);
+        File oldFile = new File(PRODUCT_DATA_FILE_PATH);
         File newFile = new File("src/com/giangvdm/salesmgmtapp/data/temp.txt");
         BufferedReader reader;
         BufferedWriter writer;
@@ -183,7 +162,7 @@ public class CustomerController extends AbstractController implements Initializa
             while (line != null) {
                 String[] lineData = line.split(",");
                 // current not equals
-                if (!lineData[0].equals(Integer.toString(selectedCustomer.getId()))) {
+                if (!lineData[0].equals(Integer.toString(selectedProduct.getId()))) {
                     // write to temp file
                     writer.write(line);
                     writer.newLine();
@@ -195,17 +174,17 @@ public class CustomerController extends AbstractController implements Initializa
             writer.close();
             
             oldFile.delete();
-            File dup = new File(CUSTOMER_DATA_FILE_PATH);
+            File dup = new File(PRODUCT_DATA_FILE_PATH);
             newFile.renameTo(dup);
             
             /** Remove record from TableView */
-            table.getItems().remove(selectedCustomer);
+            table.getItems().remove(selectedProduct);
         }
         catch (IOException e) {
-            Alert alert = new Alert(AlertType.ERROR);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
-            alert.setHeaderText("Cannot delete selected Customer.");
-            alert.setContentText("Something went wrong while deleteing selected Customer. Please try again!");
+            alert.setHeaderText("Cannot delete selected Product.");
+            alert.setContentText("Something went wrong while deleteing selected Product. Please try again!");
             alert.showAndWait();
             
             return;
@@ -213,7 +192,7 @@ public class CustomerController extends AbstractController implements Initializa
         
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Success");
-        alert.setHeaderText("Delete Customer successfully!");
+        alert.setHeaderText("Delete Product successfully!");
         alert.showAndWait();
     }
     

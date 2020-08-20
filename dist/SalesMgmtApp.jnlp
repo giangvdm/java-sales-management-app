@@ -8,11 +8,8 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="SalesMgmtApp.jar" size="11992" download="eager" />
+    <jar href="SalesMgmtApp.jar" size="19233" download="eager" />
   </resources>
-  <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="SalesMgmtApp" >
-    <param name="requiredFXVersion" value="8.0+"/>
-  </applet-desc>
   <jfx:javafx-desc  width="800" height="600" main-class="com.giangvdm.salesmgmtapp.SalesMgmtApp"  name="SalesMgmtApp" />
   <update check="always"/>
 </jnlp>

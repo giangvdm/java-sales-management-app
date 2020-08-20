@@ -2,3 +2,5 @@
 2,Derin Aydin,Ankara Turkey,WHOLESALE
 3,Maggie Landers,Ernstbrunner Strasse 88 Reichenthal Lower Austria 4193 Austria,ONLINE
 4,Kang  Tan,088934 Singapore,WHOLESALE
+5,Jerry Vu,Vietnam,ONLINE
+7,Hans Kiyosuka,Somewhere,RETAIL

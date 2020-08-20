@@ -1,1 +1,7 @@
-
+1,Exercise Band,39.00
+2,Hand Sanitizer,49.59
+3,Toilet Paper,9.35
+4,Fruit Juice,3.99
+5,Baking Soda,4.00
+6,Tricycle,99.00
+7,Desert Eagle,650.00
