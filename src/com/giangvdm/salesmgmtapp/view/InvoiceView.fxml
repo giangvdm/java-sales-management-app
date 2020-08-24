@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.giangvdm.salesmgmtapp.controller.InvoiceController">
+    <children>
+        <TableView fx:id="table" layoutY="230.0" prefHeight="370.0" prefWidth="800.0">
+            <columns>
+                <TableColumn fx:id="idColumn" prefWidth="80.0" text="ID" />
+                <TableColumn fx:id="customerNameColumn" prefWidth="320.0" text="Customer Name" />
+                <TableColumn fx:id="numberOfItemsColumn" prefWidth="160.0" text="Number of Items" />
+                <TableColumn fx:id="totalColumn" prefWidth="240.0" text="Total" />
+            </columns>
+        </TableView>
+        <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#backToHomeAction" text="&lt; Back" />
+        <Button layoutX="691.0" layoutY="197.0" mnemonicParsing="false" onAction="#delete" text="Delete Invoice" />
+    </children>
+</AnchorPane>

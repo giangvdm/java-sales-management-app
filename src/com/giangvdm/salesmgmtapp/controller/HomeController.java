@@ -50,6 +50,17 @@ public class HomeController implements Initializable {
         window.setScene(productScene);
         window.show();
     }
+    
+    @FXML
+    private void switchToInvoiceView(ActionEvent event) throws IOException {
+        Parent invoiceMenuView = FXMLLoader.load(getClass().getClassLoader().getResource("com/giangvdm/salesmgmtapp/view/InvoiceView.fxml"));
+        
+        Scene invoiceMenuScene = new Scene(invoiceMenuView);
+        
+        Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        window.setScene(invoiceMenuScene);
+        window.show();
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

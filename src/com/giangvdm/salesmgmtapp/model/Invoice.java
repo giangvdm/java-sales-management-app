@@ -1,7 +1,5 @@
 package com.giangvdm.salesmgmtapp.model;
 
-import java.util.ArrayList;
-
 /**
  *
  * @author giangvdm
@@ -14,14 +12,19 @@ public class Invoice {
     private int id;
     
     /**
-     * @param int customer id
+     * @param String customer name
      */
-    private int customerId;
+    private String customerName;
     
     /**
-     * @param ArrayList<InvoiceItem> list of bought items
+     * @param int number of items bought
      */
-    private ArrayList<InvoiceItem> items = new ArrayList<>();
+    private int numberOfItems;
+    
+    /**
+     * @param float total
+     */
+    private float total;
 
     public int getId() {
         return id;
@@ -31,25 +34,35 @@ public class Invoice {
         this.id = id;
     }
 
-    public int getCustomerId() {
-        return customerId;
+    public String getCustomerName() {
+        return customerName;
     }
 
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 
-    public ArrayList<InvoiceItem> getItems() {
-        return items;
+    public int getNumberOfItems() {
+        return numberOfItems;
     }
 
-    public void setItems(ArrayList<InvoiceItem> items) {
-        this.items = items;
+    public void setNumberOfItems(int numberOfItems) {
+        this.numberOfItems = numberOfItems;
     }
 
-    public Invoice(int id, int customerId) {
+    public float getTotal() {
+        return total;
+    }
+
+    public void setTotal(float total) {
+        this.total = total;
+    }
+
+    public Invoice(int id, String customerName, int numberOfItems, float total) {
         this.id = id;
-        this.customerId = customerId;
+        this.customerName = customerName;
+        this.numberOfItems = numberOfItems;
+        this.total = total;
     }
     
 }

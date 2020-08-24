@@ -4,3 +4,4 @@
 4,Kang  Tan,088934 Singapore,WHOLESALE
 5,Jerry Vu,Vietnam,ONLINE
 7,Hans Kiyosuka,Somewhere,RETAIL
+8,Michelle Evans,Canada,WHOLESALE

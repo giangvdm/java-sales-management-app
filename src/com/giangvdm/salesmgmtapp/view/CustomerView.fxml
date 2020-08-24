@@ -30,6 +30,7 @@
         <Label layoutX="14.0" layoutY="228.0" prefHeight="17.0" prefWidth="118.0" text="Group" />
         <Label layoutX="78.0" layoutY="99.0" style="-fx-font-weight: bold;" text="Add new Customer" />
         <Separator layoutX="14.0" layoutY="116.0" prefHeight="2.0" prefWidth="364.0" />
-      <ComboBox fx:id="customerGroupInput" layoutX="132.0" layoutY="224.0" prefWidth="150.0" />
+        <ComboBox fx:id="customerGroupInput" layoutX="132.0" layoutY="224.0" prefWidth="150.0" />
+        <Button layoutX="580.0" layoutY="268.0" mnemonicParsing="false" onAction="#switchToInvoiceCreateView" text="Create Invoice" />
     </children>
 </AnchorPane>

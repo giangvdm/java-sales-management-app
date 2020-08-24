@@ -8,7 +8,7 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="SalesMgmtApp.jar" size="19233" download="eager" />
+    <jar href="SalesMgmtApp.jar" size="24518" download="eager" />
   </resources>
   <jfx:javafx-desc  width="800" height="600" main-class="com.giangvdm.salesmgmtapp.SalesMgmtApp"  name="SalesMgmtApp" />
   <update check="always"/>

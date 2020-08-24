@@ -11,8 +11,13 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ComboBox;
@@ -21,6 +26,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 
 /**
  *
@@ -86,19 +92,26 @@ public class CustomerController extends AbstractController implements Initializa
                 String[] lineData = line.split(",");
                 
                 try {
-                    Customer cust = new Customer(
-                        Integer.parseInt(lineData[0]),
-                        lineData[1],
-                        lineData[2],
-                        lineData[3]
-                    );
-                    this.customerList.add(cust);
-                    // update last customer id
-                    if (cust.getId() > CustomerController.lastCustomerId) {
-                        CustomerController.lastCustomerId = cust.getId();
+                    // only accept lines with valid data
+                    if (
+                            lineData[3].equals(Customer.groupTypes.WHOLESALE.toString()) ||
+                            lineData[3].equals(Customer.groupTypes.RETAIL.toString()) ||
+                            lineData[3].equals(Customer.groupTypes.ONLINE.toString())
+                    ) {
+                        Customer cust = new Customer(
+                            Integer.parseInt(lineData[0]),
+                            lineData[1],
+                            lineData[2],
+                            lineData[3]
+                        );
+                        this.customerList.add(cust);
+                        // update last customer id
+                        if (cust.getId() > CustomerController.lastCustomerId) {
+                            CustomerController.lastCustomerId = cust.getId();
+                        }
                     }
                 }
-                catch (ArrayIndexOutOfBoundsException arrEx) {
+                catch (ArrayIndexOutOfBoundsException | NumberFormatException arrEx) {
                     
                 }
                 
@@ -108,7 +121,11 @@ public class CustomerController extends AbstractController implements Initializa
             reader.close();
         }
         catch (IOException e) {
-        
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Cannot read Customer data.");
+            alert.setContentText("Something went wrong while reading Customer data from file. Please try again!");
+            alert.showAndWait();
         }
         
         /** Initiate Customer TableView */
@@ -117,6 +134,33 @@ public class CustomerController extends AbstractController implements Initializa
         addressColumn.setCellValueFactory(new PropertyValueFactory<>("address"));
         groupColumn.setCellValueFactory(new PropertyValueFactory<>("group"));
         table.setItems(customerList);
+    }
+    
+    @FXML
+    private void switchToInvoiceCreateView(ActionEvent event) throws IOException {
+        Customer selectedCustomer = table.getSelectionModel().getSelectedItem();
+        
+//        if (selectedCustomer != null) {           
+            try {
+                Parent invoiceCreateView = FXMLLoader.load(getClass().getClassLoader().getResource("com/giangvdm/salesmgmtapp/view/InvoiceCreateView.fxml"));
+        
+                Scene invoiceCreateScene = new Scene(invoiceCreateView);
+
+                Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+//                window.setUserData(selectedCustomer);
+                window.setScene(invoiceCreateScene);
+                window.show();
+            }
+            catch (IOException ioex) {
+                System.out.println(ioex.getMessage());
+            }
+//        }
+//        else {
+//            Alert alert = new Alert(AlertType.INFORMATION);
+//            alert.setTitle("Heads up!");
+//            alert.setHeaderText("Please select a customer to create an invoice for!");
+//            alert.showAndWait();
+//        }
     }
     
     @Override
@@ -205,8 +249,19 @@ public class CustomerController extends AbstractController implements Initializa
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("Cannot delete selected Customer.");
-            alert.setContentText("Something went wrong while deleteing selected Customer. Please try again!");
+            alert.setContentText("Something went wrong while deleting selected Customer. Please try again!");
             alert.showAndWait();
+            
+            return;
+        }
+        catch (NullPointerException npex) {
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Heads up!");
+            alert.setHeaderText("Please select a customer to delete!");
+            alert.showAndWait();
+            
+            // delete the temp data file
+            newFile.delete();
             
             return;
         }

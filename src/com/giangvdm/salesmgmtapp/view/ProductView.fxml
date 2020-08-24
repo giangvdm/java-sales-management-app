@@ -18,13 +18,13 @@
         </columns>
       </TableView>
       <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#backToHomeAction" text="&lt; Back" />
-      <Button layoutX="12.0" layoutY="197.0" mnemonicParsing="false" text="Save" />
+      <Button layoutX="12.0" layoutY="197.0" mnemonicParsing="false" onAction="#create" text="Save" />
       <Button layoutX="691.0" layoutY="197.0" mnemonicParsing="false" onAction="#delete" text="Delete Product" />
       <Label layoutX="14.0" layoutY="133.0" prefHeight="17.0" prefWidth="118.0" text="Product Name" />
-      <TextField layoutX="132.0" layoutY="129.0" prefHeight="25.0" prefWidth="250.0" />
+      <TextField fx:id="productNameInput" layoutX="132.0" layoutY="129.0" prefHeight="25.0" prefWidth="250.0" />
       <Label layoutX="14.0" layoutY="165.0" prefHeight="17.0" prefWidth="118.0" text="Price" />
       <Label layoutX="83.0" layoutY="99.0" style="-fx-font-weight: bold;" text="Add new Product" />
-      <TextField layoutX="132.0" layoutY="161.0" prefHeight="25.0" prefWidth="126.0" />
+      <TextField fx:id="productPriceInput" layoutX="132.0" layoutY="161.0" prefHeight="25.0" prefWidth="126.0" />
       <Separator layoutX="14.0" layoutY="116.0" prefHeight="2.0" prefWidth="367.0" />
    </children>
 </AnchorPane>

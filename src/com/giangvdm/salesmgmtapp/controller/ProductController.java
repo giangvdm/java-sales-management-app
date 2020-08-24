@@ -1,6 +1,5 @@
 package com.giangvdm.salesmgmtapp.controller;
 
-import com.giangvdm.salesmgmtapp.model.Customer;
 import com.giangvdm.salesmgmtapp.model.Product;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -46,7 +45,7 @@ public class ProductController extends AbstractController implements Initializab
     private TextField productNameInput;
     
     @FXML
-    private TextField productPrice;
+    private TextField productPriceInput;
     
     /**
      * @param String Path to Product data file
@@ -69,18 +68,20 @@ public class ProductController extends AbstractController implements Initializab
                 String[] lineData = line.split(",");
                 
                 try {
-                    Product prod = new Product(
-                        Integer.parseInt(lineData[0]),
-                        lineData[1],
-                        Float.parseFloat(lineData[2])
-                    );
-                    this.productList.add(prod);
-                    // update last product id
-                    if (prod.getId() > ProductController.lastProductId) {
-                        ProductController.lastProductId = prod.getId();
+                    if (Float.parseFloat(lineData[2]) >= (float) 0) {
+                        Product prod = new Product(
+                            Integer.parseInt(lineData[0]),
+                            lineData[1],
+                            Float.parseFloat(lineData[2])
+                        );
+                        this.productList.add(prod);
+                        // update last product id
+                        if (prod.getId() > ProductController.lastProductId) {
+                            ProductController.lastProductId = prod.getId();
+                        }
                     }
                 }
-                catch (ArrayIndexOutOfBoundsException arrEx) {
+                catch (ArrayIndexOutOfBoundsException | NumberFormatException arrEx) {
                     
                 }
                 
@@ -102,8 +103,9 @@ public class ProductController extends AbstractController implements Initializab
     @Override
     public void create() {
         String name = this.productNameInput.getText().trim();
-        String price = this.productPrice.getText().trim();
+        String price = this.productPriceInput.getText().trim();
         
+        // all fields are required
         if (name.isEmpty() || price.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -116,11 +118,23 @@ public class ProductController extends AbstractController implements Initializab
         
         int id = ++ProductController.lastProductId;
         
-        Product prod = new Product(id, name, Float.parseFloat(price));
-        
-        /** Write to data file */
-        BufferedWriter writer;
         try {
+            Product prod = new Product(id, name, Float.parseFloat(price));
+            
+            // price can't be below 0
+            if (prod.getPrice() < (float) 0){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Cannot create new Product.");
+                alert.setContentText("Price cannot be below 0! Please try again!");
+                alert.showAndWait();
+
+                return;
+            }
+            
+            /** Write to data file */
+            BufferedWriter writer;
+            
             writer = new BufferedWriter(new FileWriter(PRODUCT_DATA_FILE_PATH, true));
             String line = String.join(",", Integer.toString(id), name, price);
             writer.newLine();
@@ -129,6 +143,15 @@ public class ProductController extends AbstractController implements Initializab
             
             /** Add to list */
             this.productList.add(prod);
+        }
+        catch (NumberFormatException arrEx) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Cannot save new Product.");
+            alert.setContentText("Price must be a number. Please try again!");
+            alert.showAndWait();
+            
+            return;
         }
         catch (IOException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -184,8 +207,19 @@ public class ProductController extends AbstractController implements Initializab
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("Cannot delete selected Product.");
-            alert.setContentText("Something went wrong while deleteing selected Product. Please try again!");
+            alert.setContentText("Something went wrong while deleting selected Product. Please try again!");
             alert.showAndWait();
+            
+            return;
+        }
+        catch (NullPointerException npex) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Heads up!");
+            alert.setHeaderText("Please select a product to delete!");
+            alert.showAndWait();
+            
+            // delete the temp data file
+            newFile.delete();
             
             return;
         }
