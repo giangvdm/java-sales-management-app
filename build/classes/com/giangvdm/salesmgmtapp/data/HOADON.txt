@@ -1,2 +1,3 @@
 1,John Doe,3,126.00
 a,Tom Ford,1,39.99
+2,Kang  Tan,12,503.9

@@ -9,28 +9,29 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.giangvdm.salesmgmtapp.controller.InvoiceController">
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.giangvdm.salesmgmtapp.controller.InvoiceCreateController">
     <children>
         <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#backToHomeAction" text="&lt; Back" />
-        <TableView layoutY="300.0" prefHeight="300.0" prefWidth="800.0">
+        <TableView fx:id="itemTable" layoutY="300.0" prefHeight="300.0" prefWidth="800.0">
             <columns>
-                <TableColumn prefWidth="80.0" text="ID" />
-                <TableColumn prefWidth="320.0" text="Product Name" />
-                <TableColumn prefWidth="160.0" text="Unit Price" />
-                <TableColumn prefWidth="80.0" text="Quantity" />
-                <TableColumn prefWidth="160.0" text="Row Total" />
+                <TableColumn fx:id="productIdColumn" prefWidth="80.0" text="ID" />
+                <TableColumn fx:id="productNameColumn" prefWidth="320.0" text="Product Name" />
+                <TableColumn fx:id="priceColumn" prefWidth="160.0" text="Unit Price" />
+                <TableColumn fx:id="quantityColumn" prefWidth="80.0" text="Quantity" />
+                <TableColumn fx:id="rowTotalColumn" prefWidth="160.0" text="Row Total" />
             </columns>
         </TableView>
-        <Label layoutX="17.0" layoutY="273.0" style="-fx-font-weight: bold;" text="Product to Purchase" />
+        <Label layoutX="17.0" layoutY="273.0" style="-fx-font-weight: bold;" text="Products to Purchase" />
         <Label layoutX="14.0" layoutY="49.0" style="-fx-font-weight: bold;" text="Create Invoice" />
         <Separator layoutX="14.0" layoutY="68.0" prefHeight="0.0" prefWidth="775.0" />
         <Label layoutX="14.0" layoutY="139.0" prefHeight="17.0" prefWidth="120.0" text="Select a Product" />
-        <ComboBox layoutX="131.0" layoutY="135.0" prefWidth="150.0" />
+        <ComboBox fx:id="productInput" layoutX="131.0" layoutY="135.0" prefWidth="150.0" />
         <Label layoutX="14.0" layoutY="171.0" prefHeight="17.0" prefWidth="120.0" text="Quantity" />
-        <TextField layoutX="131.0" layoutY="167.0" prefHeight="25.0" prefWidth="150.0" />
-        <Button layoutX="14.0" layoutY="192.0" mnemonicParsing="false" text="Add" />
-        <Button layoutX="691.0" layoutY="269.0" mnemonicParsing="false" text="Submit Invoice" />
+        <TextField fx:id="quantityInput" layoutX="131.0" layoutY="167.0" prefHeight="25.0" prefWidth="150.0" />
+        <Button layoutX="21.0" layoutY="207.0" mnemonicParsing="false" onAction="#addProduct" text="Add" />
+        <Button layoutX="691.0" layoutY="269.0" mnemonicParsing="false" onAction="#create" text="Submit Invoice" />
         <Label layoutX="14.0" layoutY="79.0" prefHeight="17.0" prefWidth="120.0" text="Customer Name" />
         <TextField fx:id="customerNameInput" editable="false" layoutX="131.0" layoutY="75.0" prefHeight="25.0" prefWidth="150.0" />
+      <Button layoutX="177.0" layoutY="269.0" mnemonicParsing="false" onAction="#removeProduct" text="Remove Product" />
     </children>
 </AnchorPane>

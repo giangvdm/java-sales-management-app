@@ -102,7 +102,7 @@ public class InvoiceController extends AbstractController implements Initializab
 
     @Override
     public void create() {
-        
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override

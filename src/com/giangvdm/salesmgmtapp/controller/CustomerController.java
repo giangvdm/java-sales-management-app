@@ -140,27 +140,31 @@ public class CustomerController extends AbstractController implements Initializa
     private void switchToInvoiceCreateView(ActionEvent event) throws IOException {
         Customer selectedCustomer = table.getSelectionModel().getSelectedItem();
         
-//        if (selectedCustomer != null) {           
+        if (selectedCustomer != null) {           
             try {
-                Parent invoiceCreateView = FXMLLoader.load(getClass().getClassLoader().getResource("com/giangvdm/salesmgmtapp/view/InvoiceCreateView.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("com/giangvdm/salesmgmtapp/view/InvoiceCreateView.fxml"));
+                Parent invoiceCreateView = loader.load();
+//                Parent invoiceCreateView = FXMLLoader.load(getClass().getClassLoader().getResource("com/giangvdm/salesmgmtapp/view/InvoiceCreateView.fxml"));
+                
+                InvoiceCreateController invCreateCtrl = loader.getController();
+                invCreateCtrl.setCustomerName(selectedCustomer.getName());
         
                 Scene invoiceCreateScene = new Scene(invoiceCreateView);
 
                 Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-//                window.setUserData(selectedCustomer);
                 window.setScene(invoiceCreateScene);
                 window.show();
             }
             catch (IOException ioex) {
                 System.out.println(ioex.getMessage());
             }
-//        }
-//        else {
-//            Alert alert = new Alert(AlertType.INFORMATION);
-//            alert.setTitle("Heads up!");
-//            alert.setHeaderText("Please select a customer to create an invoice for!");
-//            alert.showAndWait();
-//        }
+        }
+        else {
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Heads up!");
+            alert.setHeaderText("Please select a customer to create an invoice for!");
+            alert.showAndWait();
+        }
     }
     
     @Override
