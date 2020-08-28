@@ -94,9 +94,9 @@ public class CustomerController extends AbstractController implements Initializa
                 try {
                     // only accept lines with valid data
                     if (
-                            lineData[3].equals(Customer.groupTypes.WHOLESALE.toString()) ||
-                            lineData[3].equals(Customer.groupTypes.RETAIL.toString()) ||
-                            lineData[3].equals(Customer.groupTypes.ONLINE.toString())
+                        lineData[3].equals(Customer.groupTypes.WHOLESALE.toString()) ||
+                        lineData[3].equals(Customer.groupTypes.RETAIL.toString()) ||
+                        lineData[3].equals(Customer.groupTypes.ONLINE.toString())
                     ) {
                         Customer cust = new Customer(
                             Integer.parseInt(lineData[0]),
@@ -217,7 +217,15 @@ public class CustomerController extends AbstractController implements Initializa
     
     @Override
     public void delete() {
+        Boolean isDeleteSuccess = false;
         Customer selectedCustomer = table.getSelectionModel().getSelectedItem();
+        String lineToDelete = String.join(
+                ",",
+                Integer.toString(selectedCustomer.getId()),
+                selectedCustomer.getName(),
+                selectedCustomer.getAddress(),
+                selectedCustomer.getGroup()
+        );
         
         /** Delete Customer data from file */
         File oldFile = new File(CUSTOMER_DATA_FILE_PATH);
@@ -229,12 +237,14 @@ public class CustomerController extends AbstractController implements Initializa
             writer = new BufferedWriter(new FileWriter(newFile, true));
             String line = reader.readLine();
             while (line != null) {
-                String[] lineData = line.split(",");
                 // current not equals
-                if (!lineData[0].equals(Integer.toString(selectedCustomer.getId()))) {
+                if (!line.equals(lineToDelete)) {
                     // write to temp file
                     writer.write(line);
                     writer.newLine();
+                }
+                else {
+                    isDeleteSuccess = true;
                 }
                 // read next line
                 line = reader.readLine();
@@ -245,9 +255,6 @@ public class CustomerController extends AbstractController implements Initializa
             oldFile.delete();
             File dup = new File(CUSTOMER_DATA_FILE_PATH);
             newFile.renameTo(dup);
-            
-            /** Remove record from TableView */
-            table.getItems().remove(selectedCustomer);
         }
         catch (IOException e) {
             Alert alert = new Alert(AlertType.ERROR);
@@ -270,10 +277,21 @@ public class CustomerController extends AbstractController implements Initializa
             return;
         }
         
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Success");
-        alert.setHeaderText("Delete Customer successfully!");
-        alert.showAndWait();
+        if (isDeleteSuccess) {
+            /** Remove record from TableView */
+            table.getItems().remove(selectedCustomer);
+            
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Success");
+            alert.setHeaderText("Delete Customer successfully!");
+            alert.showAndWait();
+        }
+        else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information");
+            alert.setHeaderText("No Customer to delete!");
+            alert.showAndWait();
+        }
     }
     
 }

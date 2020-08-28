@@ -104,6 +104,7 @@ public class ProductController extends AbstractController implements Initializab
     public void create() {
         String name = this.productNameInput.getText().trim();
         String price = this.productPriceInput.getText().trim();
+        Float realPrice = Float.parseFloat(price);
         
         // all fields are required
         if (name.isEmpty() || price.isEmpty()) {
@@ -119,7 +120,7 @@ public class ProductController extends AbstractController implements Initializab
         int id = ++ProductController.lastProductId;
         
         try {
-            Product prod = new Product(id, name, Float.parseFloat(price));
+            Product prod = new Product(id, name, realPrice);
             
             // price can't be below 0
             if (prod.getPrice() < (float) 0){
@@ -136,7 +137,7 @@ public class ProductController extends AbstractController implements Initializab
             BufferedWriter writer;
             
             writer = new BufferedWriter(new FileWriter(PRODUCT_DATA_FILE_PATH, true));
-            String line = String.join(",", Integer.toString(id), name, price);
+            String line = String.join(",", Integer.toString(id), name, Float.toString(realPrice));
             writer.newLine();
             writer.write(line);
             writer.close();
@@ -171,7 +172,14 @@ public class ProductController extends AbstractController implements Initializab
     
     @Override
     public void delete() {
+        Boolean isDeleteSuccess = false;
         Product selectedProduct = table.getSelectionModel().getSelectedItem();
+        String lineToDelete = String.join(
+                ",",
+                Integer.toString(selectedProduct.getId()),
+                selectedProduct.getName(),
+                Float.toString(selectedProduct.getPrice())
+        );
         
         /** Delete Customer data from file */
         File oldFile = new File(PRODUCT_DATA_FILE_PATH);
@@ -183,12 +191,14 @@ public class ProductController extends AbstractController implements Initializab
             writer = new BufferedWriter(new FileWriter(newFile, true));
             String line = reader.readLine();
             while (line != null) {
-                String[] lineData = line.split(",");
                 // current not equals
-                if (!lineData[0].equals(Integer.toString(selectedProduct.getId()))) {
+                if (!line.equals(lineToDelete)) {
                     // write to temp file
                     writer.write(line);
                     writer.newLine();
+                }
+                else {
+                    isDeleteSuccess = true;
                 }
                 // read next line
                 line = reader.readLine();
@@ -199,9 +209,6 @@ public class ProductController extends AbstractController implements Initializab
             oldFile.delete();
             File dup = new File(PRODUCT_DATA_FILE_PATH);
             newFile.renameTo(dup);
-            
-            /** Remove record from TableView */
-            table.getItems().remove(selectedProduct);
         }
         catch (IOException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -224,10 +231,21 @@ public class ProductController extends AbstractController implements Initializab
             return;
         }
         
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Success");
-        alert.setHeaderText("Delete Product successfully!");
-        alert.showAndWait();
+        if (isDeleteSuccess) {
+            /** Remove record from TableView */
+            table.getItems().remove(selectedProduct);
+            
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Success");
+            alert.setHeaderText("Delete Product successfully!");
+            alert.showAndWait();
+        }
+        else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information");
+            alert.setHeaderText("No Product to delete!");
+            alert.showAndWait();
+        }
     }
     
 }

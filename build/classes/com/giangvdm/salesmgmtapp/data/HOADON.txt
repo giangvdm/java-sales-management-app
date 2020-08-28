@@ -1,3 +1,6 @@
 1,John Doe,3,126.00
 a,Tom Ford,1,39.99
-2,Kang  Tan,12,503.9
+2,Kang Tan,12,503.9
+3,some dude,1,-1.0
+4,another dude,0,35.36
+5,2

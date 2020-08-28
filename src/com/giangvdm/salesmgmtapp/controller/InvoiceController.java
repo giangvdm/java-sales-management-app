@@ -63,16 +63,19 @@ public class InvoiceController extends AbstractController implements Initializab
                 String[] lineData = line.split(",");
                 
                 try {
-                    Invoice inv = new Invoice(
-                        Integer.parseInt(lineData[0]),
-                        lineData[1],
-                        Integer.parseInt(lineData[2]),
-                        Float.parseFloat(lineData[3])
-                    );
-                    this.invoiceList.add(inv);
-                    // update last customer id
-                    if (inv.getId() > InvoiceController.lastInvoiceId) {
-                        InvoiceController.lastInvoiceId = inv.getId();
+                    // quantity > 0 and total >= 0
+                    if (Integer.parseInt(lineData[2]) > 0 && Float.parseFloat(lineData[3]) >= 0) {
+                        Invoice inv = new Invoice(
+                            Integer.parseInt(lineData[0]),
+                            lineData[1],
+                            Integer.parseInt(lineData[2]),
+                            Float.parseFloat(lineData[3])
+                        );
+                        this.invoiceList.add(inv);
+                        // update last customer id
+                        if (inv.getId() > InvoiceController.lastInvoiceId) {
+                            InvoiceController.lastInvoiceId = inv.getId();
+                        }
                     }
                 }
                 catch (ArrayIndexOutOfBoundsException | NumberFormatException arrEx) {
@@ -107,7 +110,15 @@ public class InvoiceController extends AbstractController implements Initializab
 
     @Override
     public void delete() {
+        Boolean isDeleteSuccess = false;
         Invoice selectedInvoice = table.getSelectionModel().getSelectedItem();
+        String lineToDelete = String.join(
+                ",",
+                Integer.toString(selectedInvoice.getId()),
+                selectedInvoice.getCustomerName(),
+                Integer.toString(selectedInvoice.getNumberOfItems()),
+                Float.toString(selectedInvoice.getTotal())
+        );
         
         /** Delete Customer data from file */
         File oldFile = new File(INVOICE_DATA_FILE_PATH);
@@ -119,12 +130,14 @@ public class InvoiceController extends AbstractController implements Initializab
             writer = new BufferedWriter(new FileWriter(newFile, true));
             String line = reader.readLine();
             while (line != null) {
-                String[] lineData = line.split(",");
                 // current not equals
-                if (!lineData[0].equals(Integer.toString(selectedInvoice.getId()))) {
+                if (!line.equals(lineToDelete)) {
                     // write to temp file
                     writer.write(line);
                     writer.newLine();
+                }
+                else {
+                    isDeleteSuccess = true;
                 }
                 // read next line
                 line = reader.readLine();
@@ -135,9 +148,6 @@ public class InvoiceController extends AbstractController implements Initializab
             oldFile.delete();
             File dup = new File(INVOICE_DATA_FILE_PATH);
             newFile.renameTo(dup);
-            
-            /** Remove record from TableView */
-            table.getItems().remove(selectedInvoice);
         }
         catch (IOException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -160,10 +170,21 @@ public class InvoiceController extends AbstractController implements Initializab
             return;
         }
         
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Success");
-        alert.setHeaderText("Delete Invoice successfully!");
-        alert.showAndWait();
+        if (isDeleteSuccess) {
+            /** Remove record from TableView */
+            table.getItems().remove(selectedInvoice);
+            
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Success");
+            alert.setHeaderText("Delete Invoice successfully!");
+            alert.showAndWait();
+        }
+        else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information");
+            alert.setHeaderText("No Invoice to delete!");
+            alert.showAndWait();
+        }
     }
     
 }
