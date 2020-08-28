@@ -219,13 +219,6 @@ public class CustomerController extends AbstractController implements Initializa
     public void delete() {
         Boolean isDeleteSuccess = false;
         Customer selectedCustomer = table.getSelectionModel().getSelectedItem();
-        String lineToDelete = String.join(
-                ",",
-                Integer.toString(selectedCustomer.getId()),
-                selectedCustomer.getName(),
-                selectedCustomer.getAddress(),
-                selectedCustomer.getGroup()
-        );
         
         /** Delete Customer data from file */
         File oldFile = new File(CUSTOMER_DATA_FILE_PATH);
@@ -233,6 +226,14 @@ public class CustomerController extends AbstractController implements Initializa
         BufferedReader reader;
         BufferedWriter writer;
         try {
+            String lineToDelete = String.join(
+                    ",",
+                    Integer.toString(selectedCustomer.getId()),
+                    selectedCustomer.getName(),
+                    selectedCustomer.getAddress(),
+                    selectedCustomer.getGroup()
+            );
+            
             reader = new BufferedReader(new FileReader(oldFile));
             writer = new BufferedWriter(new FileWriter(newFile, true));
             String line = reader.readLine();

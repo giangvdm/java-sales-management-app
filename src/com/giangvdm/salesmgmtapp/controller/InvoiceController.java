@@ -53,7 +53,7 @@ public class InvoiceController extends AbstractController implements Initializab
         /** Initiate last customer id */
         InvoiceController.lastInvoiceId = 0;
         
-        /** Read customer data file and initiate data */
+        /** Read invoice data file and initiate data */
         this.invoiceList = FXCollections.observableArrayList();
         BufferedReader reader;
         try {
@@ -112,13 +112,6 @@ public class InvoiceController extends AbstractController implements Initializab
     public void delete() {
         Boolean isDeleteSuccess = false;
         Invoice selectedInvoice = table.getSelectionModel().getSelectedItem();
-        String lineToDelete = String.join(
-                ",",
-                Integer.toString(selectedInvoice.getId()),
-                selectedInvoice.getCustomerName(),
-                Integer.toString(selectedInvoice.getNumberOfItems()),
-                Float.toString(selectedInvoice.getTotal())
-        );
         
         /** Delete Customer data from file */
         File oldFile = new File(INVOICE_DATA_FILE_PATH);
@@ -126,6 +119,14 @@ public class InvoiceController extends AbstractController implements Initializab
         BufferedReader reader;
         BufferedWriter writer;
         try {
+            String lineToDelete = String.join(
+                    ",",
+                    Integer.toString(selectedInvoice.getId()),
+                    selectedInvoice.getCustomerName(),
+                    Integer.toString(selectedInvoice.getNumberOfItems()),
+                    Float.toString(selectedInvoice.getTotal())
+            );
+            
             reader = new BufferedReader(new FileReader(oldFile));
             writer = new BufferedWriter(new FileWriter(newFile, true));
             String line = reader.readLine();

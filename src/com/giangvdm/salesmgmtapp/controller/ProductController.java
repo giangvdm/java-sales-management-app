@@ -58,7 +58,7 @@ public class ProductController extends AbstractController implements Initializab
         /** Initiate last product id */
         ProductController.lastProductId = 0;
         
-        /** Read customer data file and initiate data */
+        /** Read product data file and initiate data */
         this.productList = FXCollections.observableArrayList();
         BufferedReader reader;
         try {
@@ -174,12 +174,6 @@ public class ProductController extends AbstractController implements Initializab
     public void delete() {
         Boolean isDeleteSuccess = false;
         Product selectedProduct = table.getSelectionModel().getSelectedItem();
-        String lineToDelete = String.join(
-                ",",
-                Integer.toString(selectedProduct.getId()),
-                selectedProduct.getName(),
-                Float.toString(selectedProduct.getPrice())
-        );
         
         /** Delete Customer data from file */
         File oldFile = new File(PRODUCT_DATA_FILE_PATH);
@@ -187,6 +181,13 @@ public class ProductController extends AbstractController implements Initializab
         BufferedReader reader;
         BufferedWriter writer;
         try {
+            String lineToDelete = String.join(
+                    ",",
+                    Integer.toString(selectedProduct.getId()),
+                    selectedProduct.getName(),
+                    Float.toString(selectedProduct.getPrice())
+            );
+            
             reader = new BufferedReader(new FileReader(oldFile));
             writer = new BufferedWriter(new FileWriter(newFile, true));
             String line = reader.readLine();
